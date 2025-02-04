@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>San Valentín Interactivo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: url('https://i.imgur.com/YXfsKws.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .heart-shape {
+            width: 100%;
+            height: 100%;
+            background: #ff1493;
+            clip-path: path("M 200 50 C 150 0 50 0 50 100 C 50 175 200 300 200 300 C 200 300 350 175 350 100 C 350 0 250 0 200 50 Z");
+            position: absolute;
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.3);
+        }
+
+        .botones-centro {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background: white;
+            color: #ff1493;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #mensaje {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            color: #8b0000;
+            opacity: 0;
+            transition: opacity 0.5s;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+            z-index: 9999;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .show-mensaje {
+            opacity: 1 !important;
+            animation: float 2s infinite;
+        }
+
+        .kiss {
+            position: absolute;
+            font-size: 30px;
+            animation: kissFlight 2s linear forwards;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -10px); }
+            100% { transform: translate(-50%, 0); }
+        }
+
+        @keyframes kissFlight {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(
+                    calc(var(--dirX) * 200px), 
+                    calc(var(--dirY) * 200px)
+                ) scale(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container">
+        <div class="heart-shape"></div>
+        <div class="botones-centro">
+            <button onclick="mostrarMensaje()">Click aquí ❤️</button>
+            <button onclick="lanzarBesos()">Click acá 💋</button>
+        </div>
+    </div>
+    <div id="mensaje"></div>
+
+    <script>
+        function mostrarMensaje() {
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = '¡Feliz San Valentín! 🌹';
+            mensaje.classList.add('show-mensaje');
+            
+            setTimeout(() => {
+                mensaje.classList.remove('show-mensaje');
+            }, 3000);
+        }
+
+        function lanzarBesos() {
+            for (let i = 0; i < 15; i++) {
+                const kiss = document.createElement('div');
+                kiss.className = 'kiss';
+                kiss.textContent = '😘';
+                const randomX = Math.random() * 2 - 1; // Dirección aleatoria en X
+                const randomY = Math.random() * -1 - 0.5; // Dirección aleatoria en Y
+                kiss.style.left = `${Math.random() * window.innerWidth}px`; // Aleatorio en X
+                kiss.style.top = `${Math.random() * window.innerHeight}px`; // Aleatorio en Y
+                kiss.style.setProperty('--dirX', randomX);
+                kiss.style.setProperty('--dirY', randomY);
+                
+                document.body.appendChild(kiss);
+                
+                setTimeout(() => {
+                    kiss.remove();
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
